@@ -19,6 +19,7 @@ module GERP
     dumper = TSV::Dumper.new :key_field => "Genomic Mutation", :fields => database.fields, :type => :list, :cast => :to_f
     dumper.init
     TSV.traverse mutations, :into => dumper, :bar => "GERP", :type => :array do |mutation|
+      next if mutation.empty?
       p = database[mutation]
       next if p.nil?
       [mutation, p]
