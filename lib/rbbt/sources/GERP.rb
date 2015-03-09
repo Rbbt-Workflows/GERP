@@ -10,7 +10,8 @@ module GERP
   GERP.claim GERP.data, :proc do |directory|
     url = "http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_scores.tar.gz"
     io = Open.open(url, :nocache => true)
-    Misc.untar(io, directory)
+    Misc.untar(io, directory.find)
+    nil
   end
 
   GM_SHARD_FUNCTION = Proc.new do |key|
@@ -28,7 +29,7 @@ module GERP
 
   def self.database
     @@database ||= begin
-                     Persist.persist_tsv("GERP", GERP.data, {}, :persist => true,
+                     Persist.persist_tsv("GERP", GERP.data.produce.find, {}, :persist => true,
                                          :file => GERP.scores_packed_shard.find,
                                          :prefix => "GERP", :pattern => %w(f f), :engine => "pki",
                                          :shard_function => GM_SHARD_FUNCTION, :pos_function => CHR_POS) do |sharder|
