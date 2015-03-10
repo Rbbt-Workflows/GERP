@@ -12,7 +12,7 @@ module GERP
 
   self.organism = "Hsa/jan2013"
 
-  input :mutations, :array, "Genomic Mutation"
+  input :mutations, :array, "Genomic Mutation", nil, :stream => true
   task :annotate => :tsv do |mutations|
     database = GERP.database
     database.unnamed = true
