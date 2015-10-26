@@ -29,7 +29,7 @@ module GERP
 
   def self.database
     @@database ||= begin
-                     Persist.persist_tsv("GERP", GERP.data.produce.find, {}, :persist => true,
+                     Persist.persist_tsv("GERP", GERP.data.find, {}, :persist => true,
                                          :file => GERP.scores_packed_shard.find,
                                          :prefix => "GERP", :pattern => %w(f f), :engine => "pki",
                                          :shard_function => GM_SHARD_FUNCTION, :pos_function => CHR_POS) do |sharder|
