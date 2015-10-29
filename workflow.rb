@@ -25,4 +25,6 @@ module GERP
       [mutation, p]
     end
   end
+
+  export_asynchronous :annotate
 end
