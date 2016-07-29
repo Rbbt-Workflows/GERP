@@ -7,7 +7,7 @@ module GERP
   extend Resource
   self.subdir = 'var/GERP'
 
-  GERP.claim GERP.data, :proc do |directory|
+  GERP.claim GERP['.source'], :proc do |directory|
     url = "http://mendel.stanford.edu/SidowLab/downloads/gerp/hg19.GERP_scores.tar.gz"
     io = Open.open(url, :nocache => true)
     Misc.untar(io, directory.find)
@@ -29,7 +29,7 @@ module GERP
 
   def self.database
     @@database ||= begin
-                     Persist.persist_tsv("GERP", GERP.data.find, {}, :persist => true,
+                     Persist.persist_tsv("GERP", GERP['.source'].find, {}, :persist => true,
                                          :file => GERP.scores_packed_shard.find,
                                          :prefix => "GERP", :pattern => %w(f f), :engine => "pki",
                                          :shard_function => GM_SHARD_FUNCTION, :pos_function => CHR_POS) do |sharder|
@@ -38,7 +38,7 @@ module GERP
                        sharder.key_field = "Genomic Position"
                        sharder.type = :list
 
-                       files = GERP.data.glob('*.rates').sort
+                       files = GERP['.source'].glob('*.rates').sort
                        TSV.traverse files do |file|
                          chr = File.basename(file).split('.').first.sub(/chr/,'')
 
@@ -51,8 +51,4 @@ module GERP
                       end
                     end
   end
-end
-
-if __FILE__ == $0
-  GERP.database
 end
